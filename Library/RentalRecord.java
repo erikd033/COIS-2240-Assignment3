@@ -23,6 +23,18 @@ public class RentalRecord {
     	return vehicle;
     }
     
+    public LocalDate getDate() {
+        return recordDate;
+    }
+
+    public double getAmount() {
+        return totalAmount;
+    }
+
+    public String getType() {
+        return recordType;
+    }
+    
     @Override
     public String toString() {
         return recordType + " | Plate: " + vehicle.getLicensePlate() + 
