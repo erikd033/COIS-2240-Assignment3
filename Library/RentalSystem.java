@@ -1,8 +1,7 @@
 import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class RentalSystem {
     private List<Vehicle> vehicles = new ArrayList<>();
@@ -57,7 +56,9 @@ public class RentalSystem {
     
     private void saveVehicle(Vehicle vehicle) {
         try (FileWriter writer = new FileWriter("vehicles.txt", true)) {
-            writer.write(vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + vehicle.getModel() + "," + vehicle.getYear() + "\n");
+        	String type = vehicle instanceof Car ? "Car" : vehicle instanceof Motorcycle ? "Motorcycle" : "Truck";
+            String data = type + "," + vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + vehicle.getModel() + "," + vehicle.getYear() + "\n";
+            writer.write(data);
         } 
         catch (IOException e) {
             System.out.println("Error saving vehicle: " + e.getMessage());
@@ -66,7 +67,8 @@ public class RentalSystem {
     
     private void saveCustomer(Customer customer) {
         try (FileWriter writer = new FileWriter("customers.txt", true)) {
-            writer.write(customer.getCustomerId() + "," + customer.getCustomerName() + "\n");
+            String data = customer.getCustomerId() + "," + customer.getCustomerName() + "\n";
+            writer.write(data);
         } 
         catch (IOException e) {
             System.out.println("Error saving customer: " + e.getMessage());
@@ -75,11 +77,12 @@ public class RentalSystem {
     
     private void saveRecord(RentalRecord record) {
         try (FileWriter writer = new FileWriter("rental_records.txt", true)) {
-            writer.write(record.getVehicle().getLicensePlate() + "," +
+            String data = record.getVehicle().getLicensePlate() + "," +
                     record.getCustomer().getCustomerId() + "," +
                     record.getDate() + "," +
                     record.getAmount() + "," +
-                    record.getType() + "\n");
+                    record.getType() + "\n";
+            writer.write(data);
         } 
         catch (IOException e) {
             System.out.println("Error saving rental record: " + e.getMessage());
