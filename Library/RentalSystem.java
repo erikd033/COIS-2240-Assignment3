@@ -9,7 +9,9 @@ public class RentalSystem {
     private RentalHistory rentalHistory = new RentalHistory();
     private static RentalSystem instance;
     
-    private RentalSystem() {}
+    private RentalSystem() {
+        loadData();
+    }
 
     public static RentalSystem getInstance() {
         if (instance == null) {
@@ -57,8 +59,17 @@ public class RentalSystem {
     private void saveVehicle(Vehicle vehicle) {
         try (FileWriter writer = new FileWriter("vehicles.txt", true)) {
         	String type = vehicle instanceof Car ? "Car" : vehicle instanceof Motorcycle ? "Motorcycle" : "Truck";
-            String data = type + "," + vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + vehicle.getModel() + "," + vehicle.getYear() + "\n";
+            String data = type + "," + vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + vehicle.getModel() + "," + vehicle.getYear();
+
+            if (vehicle instanceof Car) {
+                data += "," + ((Car) vehicle).getNumSeats(); // Add number of seats for Car
+            } else if (vehicle instanceof Truck) {
+                data += "," + ((Truck) vehicle).getCargoCapacity(); // Add cargo capacity for Truck
+            }
+
+            data += "\n";
             writer.write(data);
+            System.out.println("Vehicle saved: " + data);
         } 
         catch (IOException e) {
             System.out.println("Error saving vehicle: " + e.getMessage());
@@ -69,6 +80,7 @@ public class RentalSystem {
         try (FileWriter writer = new FileWriter("customers.txt", true)) {
             String data = customer.getCustomerId() + "," + customer.getCustomerName() + "\n";
             writer.write(data);
+            System.out.println("Customer saved: " + data);
         } 
         catch (IOException e) {
             System.out.println("Error saving customer: " + e.getMessage());
@@ -83,9 +95,91 @@ public class RentalSystem {
                     record.getAmount() + "," +
                     record.getType() + "\n";
             writer.write(data);
+            System.out.println("Rental record saved: " + data);
         } 
         catch (IOException e) {
             System.out.println("Error saving rental record: " + e.getMessage());
+        }
+    }
+
+    private void loadData() {
+        loadVehicles();
+        loadCustomers();
+        loadRentalRecords();
+    }
+
+    private void loadVehicles() {
+        String line = null; 
+        try (BufferedReader reader = new BufferedReader(new FileReader("vehicles.txt"))) {
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                String type = data[0];
+                String licensePlate = data[1];
+                String make = data[2];
+                String model = data[3];
+                int year = Integer.parseInt(data[4]);
+    
+                Vehicle vehicle;
+                if (type.equals("Car")) {
+                    if (data.length < 6) {
+                        System.out.println("Error: Not enough data fields for Car in line: " + line);
+                        continue;
+                    }
+                    int numSeats = Integer.parseInt(data[5]);
+                    vehicle = new Car(make, model, year, numSeats);
+                } else if (type.equals("Motorcycle")) {
+                    boolean hasSidecar = false;
+                    vehicle = new Motorcycle(make, model, year, hasSidecar);
+                } else {
+                    if (data.length < 6) {
+                        System.out.println("Error: Not enough data fields for Truck in line: " + line);
+                        continue;
+                    }
+                    double cargoCapacity = Double.parseDouble(data[5]);
+                    vehicle = new Truck(make, model, year, cargoCapacity);
+                }
+                vehicle.setLicensePlate(licensePlate);
+                vehicles.add(vehicle);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading vehicles: " + e.getMessage());
+        }
+    }
+
+    private void loadCustomers() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("customers.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                int customerId = Integer.parseInt(data[0]);
+                String customerName = data[1];
+                customers.add(new Customer(customerId, customerName));
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading customers: " + e.getMessage());
+        }
+    }
+
+    private void loadRentalRecords() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("rental_records.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                String licensePlate = data[0];
+                int customerId = Integer.parseInt(data[1]);
+                LocalDate date = LocalDate.parse(data[2]);
+                double amount = Double.parseDouble(data[3]);
+                String type = data[4];
+
+                Vehicle vehicle = findVehicleByPlate(licensePlate);
+                Customer customer = findCustomerById(customerId);
+                if (vehicle != null && customer != null) {
+                    RentalRecord record = new RentalRecord(vehicle, customer, date, amount, type);
+                    rentalHistory.addRecord(record);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading rental records: " + e.getMessage());
         }
     }
 
