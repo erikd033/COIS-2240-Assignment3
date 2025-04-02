@@ -19,6 +19,12 @@ public class VehicleRentalApp {
 
                     System.out.print("Enter license plate: ");
                     String plate = scanner.nextLine().toUpperCase();
+
+                    if (rentalSystem.findVehicleByPlate(plate) != null) {
+                        System.out.println("Vehicle with this license plate already exists.");
+                        break;
+                    }
+
                     System.out.print("Enter make: ");
                     String make = scanner.nextLine();
                     System.out.print("Enter model: ");
