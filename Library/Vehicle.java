@@ -19,6 +19,7 @@ public abstract class Vehicle {
         this(null, null, 0);
     }
     
+    // Capitalize method
     private String capitalize(String input) {
         if (input == null || input.isEmpty()) {
             return null;
