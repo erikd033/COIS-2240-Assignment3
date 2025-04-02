@@ -64,8 +64,10 @@ public class VehicleRentalApp {
                     System.out.print("Enter name: ");
                     String cname = scanner.nextLine();
 
-                    rentalSystem.addCustomer(new Customer(cid, cname));
-                    System.out.println("Customer added.");
+                    boolean customerAdded = rentalSystem.addCustomer(new Customer(cid, cname));
+                    if (customerAdded) {
+                        System.out.println("Customer added.");
+                    } 
                     break;
                     
                 case 3:

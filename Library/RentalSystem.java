@@ -25,9 +25,14 @@ public class RentalSystem {
         saveVehicle(vehicle);
     }
 
-    public void addCustomer(Customer customer) {
+    public boolean addCustomer(Customer customer) {
+        if (findCustomerById(customer.getCustomerId()) != null) {
+            System.out.println("Customer with this ID already exists.");
+            return false;
+        }
         customers.add(customer);
         saveCustomer(customer);
+        return true;
     }
 
     public void rentVehicle(Vehicle vehicle, Customer customer, LocalDate date, double amount) {
