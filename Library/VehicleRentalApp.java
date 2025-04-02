@@ -56,10 +56,10 @@ public class VehicleRentalApp {
                     if (vehicle != null){
 	                    vehicle.setLicensePlate(plate);
 	                    rentalSystem.addVehicle(vehicle);
-	                    System.out.print("Vehicle added.");
+	                    System.out.print("Vehicle added. \n");
                     }
                     else {
-	                    System.out.print("Vehicle not added.");
+	                    System.out.print("Vehicle not added. \n");
                     }
                     break;
 
