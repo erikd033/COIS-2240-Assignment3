@@ -18,6 +18,14 @@ public abstract class Vehicle {
     public Vehicle() {
         this(null, null, 0);
     }
+    
+    // Capitalize method
+    private String capitalize(String input) {
+        if (input == null || input.isEmpty()) {
+            return null;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
 
     // TASK 2 PART 1
     public void setLicensePlate(String plate) {
@@ -44,14 +52,6 @@ public abstract class Vehicle {
             }
         }
         return true;
-    }
-    
-    // Capitalize method
-    private String capitalize(String input) {
-        if (input == null || input.isEmpty()) {
-            return null;
-        }
-        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 
     public void setStatus(VehicleStatus status) {
