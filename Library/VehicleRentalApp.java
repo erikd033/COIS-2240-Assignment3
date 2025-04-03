@@ -11,39 +11,32 @@ public class VehicleRentalApp {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            String plate = "";
-            boolean validPlate = false;
-
-            while (!validPlate) {
-                System.out.print("Enter license plate: ");
-                plate = scanner.nextLine().toUpperCase();
-
-                if (rentalSystem.findVehicleByPlate(plate) != null) {
-                    System.out.println("Vehicle with this license plate already exists.");
-                    break;
-                }
-                        
-                try {
-                    Vehicle tempVehicle = new Car("", "", 0, 0);
-                    tempVehicle.setLicensePlate(plate);                            validPlate = true;
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Error: " + e.getMessage() + " Please try again.");
-            }
-        }
-
-
             switch (choice) {
                 case 1:
                     System.out.println("  1: Car\n  2: Motorcycle\n  3: Truck");
                     int type = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.print("Enter license plate: ");
-                    String plate = scanner.nextLine().toUpperCase();
+                    // TASK 2 PART 1
+                    String plate = "";
+                    boolean validPlate = false;
 
-                    if (rentalSystem.findVehicleByPlate(plate) != null) {
-                        System.out.println("Vehicle with this license plate already exists.");
-                        break;
+                    while (!validPlate) {
+                        System.out.print("Enter license plate: ");
+                        plate = scanner.nextLine().toUpperCase();
+
+                        if (rentalSystem.findVehicleByPlate(plate) != null) {
+                            System.out.println("Vehicle with this license plate already exists.");
+                            break;
+                        }
+                        
+                        try {
+                            Vehicle tempVehicle = new Car("", "", 0, 0);
+                            tempVehicle.setLicensePlate(plate);
+                            validPlate = true;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error: " + e.getMessage() + " Please try again.");
+                        }
                     }
 
                     System.out.print("Enter make: ");
