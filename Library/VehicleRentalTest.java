@@ -27,5 +27,26 @@ class VehicleRentalTest {
 		assertThrows(IllegalArgumentException.class, () -> vehicle.setLicensePlate("ZZZ99"));
 		}
 	
+// TASK 2 PART 2
+		@Test
+		void testRentAndReturnVehicle() {
+			Vehicle vehicle = new Vehicle() {};
+			Customer customer = new Customer(1, "Bjorn Dyrmishi") {};
+			
+	        LocalDate date = LocalDate.of(2025, 4, 1);
+	        double amount = 50.0;
+	        double extraFee = 3.0;
+			
+			assertEquals(Vehicle.VehicleStatus.AVAILABLE, vehicle.getStatus(), "Error: The vehicle should be initially available.");
+			RentalSystem rentalSystem = RentalSystem.getInstance();
+	        
+	        boolean isRented = rentalSystem.rentVehicle(vehicle, customer, date, amount );
+	        assertTrue(isRented, "Error: The vehicle should be successfully rented.");
+	        assertEquals(Vehicle.VehicleStatus.RENTED, vehicle.getStatus(), "Error: The vehicle status should be RENTED.");
+	        
+	        boolean isReturned = rentalSystem.returnVehicle(vehicle, customer, date, extraFee );
+	        assertTrue(isReturned, "Error: The vehicle should be successfully returned.");
+	        assertEquals(Vehicle.VehicleStatus.AVAILABLE, vehicle.getStatus(), "Error: The vehicle status should be AVAILABLE.");
+		}
 }
 
