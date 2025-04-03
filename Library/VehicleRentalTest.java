@@ -48,5 +48,28 @@ class VehicleRentalTest {
 	        assertTrue(isReturned, "Error: The vehicle should be successfully returned.");
 	        assertEquals(Vehicle.VehicleStatus.AVAILABLE, vehicle.getStatus(), "Error: The vehicle status should be AVAILABLE.");
 		}
+		
+// TASK 3 PART 3		
+		@Test
+		void testSingletonRentalSystem() throws Exception {
+	        Constructor<RentalSystem> constructor = RentalSystem.class.getDeclaredConstructor();
+	        int constructorModifiers = constructor.getModifiers();
+
+	        assertEquals(Modifier.PRIVATE, constructorModifiers, "Constructor should be private to enforce Singleton pattern.");
+	        RentalSystem instance = RentalSystem.getInstance();
+	        
+
+	        assertNotNull(instance, "Instance obtained from getInstance() should not be null.");
+	        constructor.setAccessible(true); 
+	        
+	        try {
+	            RentalSystem instance2 = constructor.newInstance();
+	            fail("Reflection should not allow creation of another instance.");
+	        } catch (Exception e) {
+	            assertTrue(e.getCause() instanceof IllegalStateException, "Expected IllegalStateException due to reflection.");
+	        }
+	        RentalSystem instance3 = RentalSystem.getInstance();
+	        assertSame(instance, instance3, "Both instances should refer to the same object, ensuring Singleton behavior.");
+		}
 }
 
