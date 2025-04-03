@@ -11,6 +11,27 @@ public class VehicleRentalApp {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
+            String plate = "";
+            boolean validPlate = false;
+
+            while (!validPlate) {
+                System.out.print("Enter license plate: ");
+                plate = scanner.nextLine().toUpperCase();
+
+                if (rentalSystem.findVehicleByPlate(plate) != null) {
+                    System.out.println("Vehicle with this license plate already exists.");
+                    break;
+                }
+                        
+                try {
+                    Vehicle tempVehicle = new Car("", "", 0, 0);
+                    tempVehicle.setLicensePlate(plate);                            validPlate = true;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Error: " + e.getMessage() + " Please try again.");
+            }
+        }
+
+
             switch (choice) {
                 case 1:
                     System.out.println("  1: Car\n  2: Motorcycle\n  3: Truck");
@@ -131,7 +152,7 @@ public class VehicleRentalApp {
 
                     rentalSystem.returnVehicle(vehicleToReturn, customerToReturn, LocalDate.now(), returnFees);
                     break;
-                    
+
                 case 5:
                     rentalSystem.displayAvailableVehicles();
                     break;
