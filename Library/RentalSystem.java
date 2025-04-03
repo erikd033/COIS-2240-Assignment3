@@ -9,8 +9,12 @@ public class RentalSystem {
     private RentalHistory rentalHistory = new RentalHistory();
     private static RentalSystem instance;
     
+    // TASK 2 PART 3
     private RentalSystem() {
         loadData();
+        if (instance != null) {
+            throw new IllegalStateException("Instance already created");
+        }
     }
 
     public static RentalSystem getInstance() {
